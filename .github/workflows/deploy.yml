@@ -3,7 +3,13 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main # Change this to your default branch name if it's not "main"
+      - main # Change this if your default branch is not "main"
+
+  workflow_dispatch: # Allows you to manually trigger the workflow
+
+permissions:
+  pages: write # Grants access to write to the Pages API
+  id-token: write # Grants access to generate ID tokens for deployment
 
 jobs:
   build-and-deploy:
@@ -11,14 +17,14 @@ jobs:
 
     steps:
       # Step 1: Checkout the repository
-      - name: Checkout Code
+      - name: Checkout Repository
         uses: actions/checkout@v3
 
       # Step 2: Set up Node.js environment
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 16 # Use the Node.js version required by your project
+          node-version: 22 # Use the Node.js version your project requires
 
       # Step 3: Install dependencies and build the project
       - name: Install Dependencies and Build
@@ -28,7 +34,6 @@ jobs:
 
       # Step 4: Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
+        uses: actions/deploy-pages@v2
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: dist/
+          build_dir: dist/
