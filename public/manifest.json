@@ -1,6 +1,7 @@
 {
-  "name": "Penpot starter plugin",
+  "name": "MynaUI Icons",
   "code": "plugin.js",
-  "description": "This is a starter plugin for Penpot",
+  "icon": "icon.png",
+  "description": "Beautifully crafted open source icons for your next project.",
   "permissions": ["content:read", "content:write"]
 }

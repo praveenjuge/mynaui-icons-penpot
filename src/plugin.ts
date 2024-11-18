@@ -1,23 +1,33 @@
-penpot.ui.open("Penpot plugin starter template", `?theme=${penpot.theme}`);
+import type { PluginMessageEvent, PluginUIEvent } from "./model.js";
 
-penpot.ui.onMessage<string>((message) => {
-  if (message === "create-text") {
-    const text = penpot.createText("Hello world!");
+penpot.ui.open("MynaUI Icons", `?theme=${penpot.theme}`, {
+  width: 292,
+  height: 500,
+});
 
-    if (text) {
-      text.x = penpot.viewport.center.x;
-      text.y = penpot.viewport.center.y;
+penpot.ui.onMessage<PluginUIEvent>((message) => {
+  if (message.type === "insert-icon") {
+    console.log(message);
 
-      penpot.selection = [text];
+    const { name, svg } = message.content;
+
+    if (!svg || !name) {
+      return;
+    }
+
+    const icon = penpot.createShapeFromSvg(svg);
+    if (icon) {
+      icon.name = name;
+      icon.x = penpot.viewport.center.x;
+      icon.y = penpot.viewport.center.y;
     }
   }
 });
 
-// Update the theme in the iframe
 penpot.on("themechange", (theme) => {
-  penpot.ui.sendMessage({
-    source: "penpot",
-    type: "themechange",
-    theme,
-  });
+  sendMessage({ type: "theme", content: theme });
 });
+
+function sendMessage(message: PluginMessageEvent) {
+  penpot.ui.sendMessage(message);
+}
